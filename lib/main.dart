@@ -1,6 +1,11 @@
+import 'package:dots_demo/input_dialog.dart';
+import 'package:dots_demo/radio_dialog.dart';
+import 'package:dots_demo/slider_dialog.dart';
 import 'package:floating_dots/floating_dots.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import 'checkbox_dialog.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,6 +15,11 @@ class MyApp extends StatelessWidget {
     SystemChrome.setEnabledSystemUIOverlays([]);
 
     return MaterialApp(
+      theme: ThemeData(
+        brightness: Brightness.dark,
+        primarySwatch: Colors.teal,
+        accentColor: Colors.blue,
+      ),
       title: 'Dots Demo',
       home: Demo(),
     );
@@ -36,6 +46,7 @@ class DemoState extends State<Demo> {
   ];
   double opacity = .7;
   DotSpeed dotSpeed = DotSpeed.mixed;
+  Color backgroundColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +56,7 @@ class DemoState extends State<Demo> {
           Container(
             width: double.infinity,
             height: double.infinity,
-            color: Colors.black,
+            color: backgroundColor,
           ),
           FloatingDotGroup(
             number: number,
@@ -59,166 +70,212 @@ class DemoState extends State<Demo> {
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("Colors"),
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return ColorSelectionDialog(
-                            color: "Colors",
-                            allColors: (Colors.primaries).cast<Color>() +
-                                Colors.accents,
-                            selectedColors: colors,
-                            onSelectedColorsListChanged: (selectedColors) {
-                              setState(() {
-                                colors = selectedColors;
-                              });
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
-                  RaisedButton(
-                    child: Text("Size"),
-                    onPressed: () {},
-                  ),
-                  RaisedButton(
-                    child: Text("Opacity"),
-                    onPressed: () {},
-                  ),
-                  RaisedButton(
-                    child: Text("Number"),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  RaisedButton(
-                    child: Text("Speed"),
-                    onPressed: () {},
-                  ),
-                  RaisedButton(
-                    child: Text("Direction"),
-                    onPressed: () {},
-                  ),
-                  RaisedButton(
-                    child: Text("Trajectory"),
-                    onPressed: () {},
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ColorSelectionDialog extends StatefulWidget {
-  final String color;
-  final List<Color> allColors;
-  final List<Color> selectedColors;
-  final ValueChanged<List<Color>> onSelectedColorsListChanged;
-
-  ColorSelectionDialog({
-    this.color,
-    this.allColors,
-    this.selectedColors,
-    this.onSelectedColorsListChanged,
-  });
-
-  @override
-  _ColorSelectionDialogState createState() => _ColorSelectionDialogState();
-}
-
-class _ColorSelectionDialogState extends State<ColorSelectionDialog> {
-  List<Color> _tempSelectedColors = [];
-
-  @override
-  void initState() {
-    _tempSelectedColors = widget.selectedColors;
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Row(
+              ButtonTheme(
+                layoutBehavior: ButtonBarLayoutBehavior.constrained,
+                child: ButtonBar(
+                  alignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        widget.color,
-                      ),
+                    RaisedButton(
+                      child: Text("Colors"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SelectionDialog(
+                              boxTitle: (color) {
+                                return Container(
+                                  height: 20,
+                                  color: color,
+                                );
+                              },
+                              header: "Colors",
+                              allItems: (Colors.primaries).cast<Color>() +
+                                  Colors.accents,
+                              selectedItems: colors,
+                              onSelectedItemsListChanged: (selectedColors) {
+                                setState(() {
+                                  colors = selectedColors;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
                     ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: RaisedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          'Done',
-                        ),
-                      ),
+                    RaisedButton(
+                      child: Text("Size"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return RadioDialog(
+                              boxTitle: (value) {
+                                return Text(value.toString());
+                              },
+                              header: "Size",
+                              allItems: DotSize.values,
+                              selectedItem: dotSize,
+                              onSelectedItemChanged: (selectedSize) {
+                                setState(() {
+                                  dotSize = selectedSize;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("Opacity"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return SliderDialog(
+                              header: "Opacity",
+                              selectedValue: opacity,
+                              onSelectedValueChanged: (value) {
+                                setState(() {
+                                  opacity = value;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("Background"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return RadioDialog(
+                              boxTitle: (color) {
+                                return Container(
+                                  height: 20,
+                                  color: color,
+                                );
+                              },
+                              header: "Background",
+                              allItems: [
+                                    Colors.black,
+                                    Colors.white,
+                                    Colors.grey
+                                  ] +
+                                  (Colors.primaries).cast<Color>() +
+                                  Colors.accents,
+                              selectedItem: backgroundColor,
+                              onSelectedItemChanged: (color) {
+                                setState(() {
+                                  backgroundColor = color;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              ButtonTheme(
+                padding: EdgeInsets.all(10),
+                child: ButtonBar(
+                  alignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    RaisedButton(
+                      child: Text("Number"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return InputDialog(
+                              header: "Number",
+                              selectedValue: number,
+                              onSelectedValueChanged: (selectedValue) {
+                                setState(() {
+                                  number = selectedValue;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("Speed"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return RadioDialog(
+                              boxTitle: (value) {
+                                return Text(value.toString());
+                              },
+                              header: "Speed",
+                              allItems: DotSpeed.values,
+                              selectedItem: dotSpeed,
+                              onSelectedItemChanged: (selectedSpeed) {
+                                setState(() {
+                                  dotSpeed = selectedSpeed;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("Direction"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return RadioDialog(
+                              boxTitle: (value) {
+                                return Text(value.toString());
+                              },
+                              header: "Direction",
+                              allItems: Direction.values,
+                              selectedItem: direction,
+                              onSelectedItemChanged: (selectedDirection) {
+                                setState(() {
+                                  direction = selectedDirection;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
+                    RaisedButton(
+                      child: Text("Trajectory"),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return RadioDialog(
+                              boxTitle: (value) {
+                                return Text(value.toString());
+                              },
+                              header: "Trajectory",
+                              allItems: Trajectory.values,
+                              selectedItem: trajectory,
+                              onSelectedItemChanged: (selectedTrajectory) {
+                                setState(() {
+                                  trajectory = selectedTrajectory;
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
                     ),
                   ],
                 ),
               ),
             ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget.allColors.length,
-              itemBuilder: (BuildContext context, int index) {
-                final color = widget.allColors[index];
-                return Container(
-                  child: CheckboxListTile(
-                    dense: true,
-                    title: Container(
-                      height: 20,
-                      width: 10,
-                      color: color,
-                    ),
-                    value: _tempSelectedColors.contains(color),
-                    onChanged: (bool value) {
-                      if (value) {
-                        if (!_tempSelectedColors.contains(color)) {
-                          setState(() {
-                            _tempSelectedColors.add(color);
-                          });
-                        }
-                      } else {
-                        if (_tempSelectedColors.contains(color)) {
-                          setState(
-                            () {
-                              _tempSelectedColors
-                                  .removeWhere((_color) => _color == color);
-                            },
-                          );
-                        }
-                      }
-                      widget.onSelectedColorsListChanged(_tempSelectedColors);
-                    },
-                  ),
-                );
-              },
-            ),
           ),
         ],
       ),
