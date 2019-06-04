@@ -1,16 +1,16 @@
-# demo
+# floating_dots-demo
 
-A new Flutter project.
+A demo for [`floating_dots`](https://pub.dartlang.org/packages/floating_dots) on flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+In your `pubspec.yaml` root add:
 
-A few resources to get you started if this is your first Flutter project:
+```yaml
+dependencies:
+    floating_dots: ^0.2.2
+```
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+then,
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+`import 'package:floating_dots/floating_dots.dart';`
