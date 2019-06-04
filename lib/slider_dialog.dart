@@ -62,7 +62,10 @@ class _SliderDialogState extends State<SliderDialog> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  _tempSelectedValue.toString().substring(0, 5),
+                  _tempSelectedValue
+                      .toString()
+                      .padRight(5, '0')
+                      .substring(0, 5),
                   style: themeData.primaryTextTheme.caption,
                 ),
               ],

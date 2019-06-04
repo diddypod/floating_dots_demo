@@ -89,7 +89,12 @@ class DemoState extends State<Demo> {
                                 );
                               },
                               header: "Colors",
-                              allItems: (Colors.primaries).cast<Color>() +
+                              allItems: [
+                                    Colors.black,
+                                    Colors.grey,
+                                    Colors.white
+                                  ] +
+                                  (Colors.primaries).cast<Color>() +
                                   Colors.accents,
                               selectedItems: colors,
                               onSelectedItemsListChanged: (selectedColors) {
@@ -160,8 +165,8 @@ class DemoState extends State<Demo> {
                               header: "Background",
                               allItems: [
                                     Colors.black,
-                                    Colors.white,
-                                    Colors.grey
+                                    Colors.grey,
+                                    Colors.white
                                   ] +
                                   (Colors.primaries).cast<Color>() +
                                   Colors.accents,
@@ -180,7 +185,7 @@ class DemoState extends State<Demo> {
                 ),
               ),
               ButtonTheme(
-                padding: EdgeInsets.all(10),
+                layoutBehavior: ButtonBarLayoutBehavior.constrained,
                 child: ButtonBar(
                   alignment: MainAxisAlignment.center,
                   children: <Widget>[
