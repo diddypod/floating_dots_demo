@@ -2,6 +2,8 @@
 
 A demo for [`floating_dots`](https://pub.dartlang.org/packages/floating_dots) on flutter.
 
+A built APK is available under the release tab.
+
 ## Getting Started
 
 In your `pubspec.yaml` root add:
